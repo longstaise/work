@@ -76,7 +76,7 @@ h1, h2, h3 {{ color: {header_color} !important; }}
 
 /* --- SIDEBAR FIX --- */
 [data-testid="stSidebar"] {{
-    background-color: {card_bg} !important;
+    background-color: {bg_color} !important;
 }}
 [data-testid="stSidebar"] h1, 
 [data-testid="stSidebar"] h2, 
