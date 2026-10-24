@@ -74,12 +74,12 @@ h1, h2, h3 {{ color: {header_color} !important; }}
 }}
 .success-box, .success-box b {{ color: {success_text} !important; }}
 
-[data-testid="stSidebar"] {
+[data-testid="stSidebar"] {{
     background-color: transparent !important;
-}
-[data-testid="stSidebar"] * {
+}}
+[data-testid="stSidebar"] * {{
     color: inherit !important;
-}
+}}
 </style>
 """, unsafe_allow_html=True)
 
