@@ -75,16 +75,20 @@ h1, h2, h3 {{ color: {header_color} !important; }}
 .success-box, .success-box b {{ color: {success_text} !important; }}
 
 /* --- SIDEBAR FIX --- */
-[data-testid="stSidebar"] {{
+section[data-testid="stSidebar"] {{
     background-color: {bg_color} !important;
 }}
-[data-testid="stSidebar"] h1, 
-[data-testid="stSidebar"] h2, 
-[data-testid="stSidebar"] h3, 
-[data-testid="stSidebar"] label, 
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span {{
+section[data-testid="stSidebar"] h1, 
+section[data-testid="stSidebar"] h2, 
+section[data-testid="stSidebar"] h3, 
+section[data-testid="stSidebar"] label, 
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span {{
     color: {text_color} !important;
+}}
+/* Fix the dropdown menu text color */
+div[data-baseweb="select"] > div {{
+    color: #2C3E50 !important;
 }}
 </style>
 """, unsafe_allow_html=True)
