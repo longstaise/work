@@ -74,11 +74,17 @@ h1, h2, h3 {{ color: {header_color} !important; }}
 }}
 .success-box, .success-box b {{ color: {success_text} !important; }}
 
+/* --- SIDEBAR FIX --- */
 [data-testid="stSidebar"] {{
-    background-color: transparent !important;
+    background-color: {card_bg} !important;
 }}
-[data-testid="stSidebar"] * {{
-    color: inherit !important;
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3, 
+[data-testid="stSidebar"] label, 
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span {{
+    color: {text_color} !important;
 }}
 </style>
 """, unsafe_allow_html=True)
