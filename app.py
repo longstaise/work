@@ -8,7 +8,7 @@ import datetime
 # ==========================================
 st.set_page_config(page_title="Radiology Prep Portal", page_icon="🏥", layout="wide")
 
-# Detect Dark Mode using JavaScript to prevent patchy colors
+# Detect Dark Mode
 is_dark_mode = st.components.v1.html(
     """
     <script>
@@ -29,6 +29,7 @@ if "dark" in str(is_dark_mode):
     warn_text = "#FADBD8"
     success_bg = "#144A38"
     success_text = "#D1F2EB"
+    sidebar_text = "#FFFFFF"
 else:
     bg_color = "#F4F7F6"
     card_bg = "#FFFFFF"
@@ -38,8 +39,9 @@ else:
     warn_text = "#7B241C"
     success_bg = "#E8F8F5"
     success_text = "#145A32"
+    sidebar_text = "#2C3E50"
 
-# Apply the CSS using the dynamic colors
+# Apply the CSS
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
@@ -47,14 +49,27 @@ st.markdown(f"""
 .stApp {{ background-color: {bg_color} !important; }}
 html, body, [class*="css"] {{ font-family: 'Inter', sans-serif; color: {text_color} !important; }}
 h1, h2, h3 {{ color: {header_color} !important; }}
-/* Force Streamlit text to be dark if background is light */
+
+/* Force standard text colors */
 [data-testid="stMarkdownContainer"] p, 
 [data-testid="stMarkdownContainer"] li, 
 .stMarkdown p, 
 .stMarkdown li,
 .stCheckbox label,
-.stRadio label {{
+.stRadio label,
+.stSelectbox label,
+.stNumberInput label,
+.stSlider label {{
     color: {text_color} !important;
+}}
+
+/* Sidebar Contrast Fix */
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3, 
+[data-testid="stSidebar"] p, 
+[data-testid="stSidebar"] label {{
+    color: {sidebar_text} !important;
 }}
 
 .custom-card {{ 
@@ -92,13 +107,12 @@ def card(title, text, icon=""):
     st.markdown(f'<div class="custom-card"><h4 style="margin-top:0;">{icon} {title}</h4><p style="margin-bottom:0; font-size:16px;">{text}</p></div>', unsafe_allow_html=True)
 
 # ==========================================
-# 2. PDF GENERATOR (With Visual Guide)
+# 2. PDF GENERATOR
 # ==========================================
 def create_pdf(checklist_items, modality):
     pdf = FPDF()
     pdf.add_page()
     
-    # Header
     pdf.set_font("Arial", size=18, style='B')
     pdf.set_text_color(26, 82, 118)
     pdf.cell(200, 10, txt="ACCREMeter Patient Guide", ln=True, align='C')
@@ -109,7 +123,6 @@ def create_pdf(checklist_items, modality):
     pdf.cell(200, 8, txt=f"Date: {datetime.date.today()}", ln=True, align='C')
     pdf.ln(10)
     
-    # Checklist Body
     pdf.set_font("Arial", size=14, style='B')
     pdf.set_text_color(0, 0, 0)
     pdf.cell(200, 10, txt="What to bring and do:", ln=True)
@@ -120,7 +133,6 @@ def create_pdf(checklist_items, modality):
     
     pdf.ln(10)
     
-    # Visual Guide for Elderly
     pdf.set_font("Arial", size=14, style='B')
     pdf.cell(200, 10, txt="Visual Guide:", ln=True)
     pdf.ln(2)
@@ -155,7 +167,6 @@ def create_pdf(checklist_items, modality):
 
     pdf.ln(10)
     
-    # Warning Section
     pdf.set_font("Arial", size=14, style='B')
     pdf.set_text_color(200, 0, 0)
     pdf.cell(200, 10, txt="Important Safety Reminders:", ln=True)
@@ -164,15 +175,14 @@ def create_pdf(checklist_items, modality):
     pdf.set_text_color(0, 0, 0)
     
     if modality == "MRI":
-        pdf.multi_cell(0, 8, txt="- DO NOT enter the MRI room with any metal (keys, watches, pacemakers). It is extremely dangerous.\n- If you have implants, you MUST bring your implant passport.")
+        pdf.multi_cell(0, 8, txt="- DO NOT enter the MRI room with any metal. It is extremely dangerous.\n- If you have implants, you MUST bring your implant passport.")
     elif modality == "CT Scan":
-        pdf.multi_cell(0, 8, txt="- Tell the staff if you are pregnant.\n- If you take Metformin, tell the staff.\n- We must check your Creatinine level. If it is below 45, the scan may be delayed.")
+        pdf.multi_cell(0, 8, txt="- Tell the staff if you are pregnant.\n- If you take Metformin, tell the staff.\n- We must check your Creatinine level.")
     else:
         pdf.multi_cell(0, 8, txt="- Tell the staff if you are pregnant.\n- Remove any metal jewelry or glasses.")
         
     pdf.ln(10)
     
-    # Footer
     pdf.set_font("Arial", size=10, style='I')
     pdf.set_text_color(100, 100, 100)
     pdf.cell(0, 10, txt="The machine is open, and the radiographer can see and hear you at all times.", ln=True, align='C')
@@ -200,12 +210,11 @@ if persona in ["Senior", "Visual Impairment"]:
 if page == "Home & Prep":
     st.title(f"🏥 {modality} Preparation Guide")
     
-    # --- NEW: Anxiety Slider ---
     st.markdown("### How are you feeling today?")
     anxiety_level = st.slider("Slide to show your anxiety level (1 = Calm, 10 = Very Scared)", 1, 10, 5)
     
     if anxiety_level >= 7:
-        st.info("💙 **It is completely normal to feel scared.** We are here to help you. Take a deep breath in for 4 seconds, hold for 4 seconds, and breathe out for 4 seconds. You are safe.")
+        st.info("💙 **It is completely normal to feel scared.** Take a deep breath in for 4 seconds, hold for 4 seconds, and breathe out for 4 seconds. You are safe.")
     elif anxiety_level >= 4:
         st.success("😊 **You are doing great.** Just follow the steps, and remember the radiographer is there to help you.")
     else:
@@ -213,12 +222,10 @@ if page == "Home & Prep":
 
     st.markdown("---")
     
-    # Timeline
     st.markdown("### 🗺️ What happens on the day:")
     st.markdown("**1. Arrive & Check-in** ➡️ **2. The Scan (15-30 mins)** ➡️ **3. Go Home**")
     st.markdown("---")
     
-    # Dynamic Content
     if modality == "CT Scan":
         card("Fasting & Meds", "Do not eat for 4 hours. Tell us if you take Metformin.", "🚫")
         st.markdown('<div class="warning-box"><b>Kidney Check:</b> We need your latest Creatinine blood test. If it is 30-45, a radiologist must approve the scan.</div>', unsafe_allow_html=True)
@@ -242,22 +249,22 @@ elif page == "Safety Triage":
     
     col1, col2 = st.columns(2)
     
-    # A subtle, elegant style for the question boxes
-    box_style = "background-color: #E8F0F8; color: #1A5276 !important; padding: 15px; border-radius: 8px; margin-top: 10px; margin-bottom: 10px; font-weight: 600; border-left: 4px solid #3498DB;"
+    # Bulletproof HTML Boxes (Light background, dark text forced)
+    safe_box = "background-color: #E8F0F8; color: #1A5276 !important; padding: 15px; border-radius: 8px; border-left: 5px solid #3498DB; margin-bottom: 10px;"
     
     with col1:
-        st.markdown(f'<div style="{box_style}">1. Do you have any metal implants or a pacemaker?</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="{safe_box}"><h4 style="color: #1A5276 !important; margin: 0;">1. Do you have any metal implants or a pacemaker?</h4></div>', unsafe_allow_html=True)
         has_metal = st.checkbox("Yes, I have metal", label_visibility="collapsed")
         
-        st.markdown(f'<div style="{box_style}">2. Are you pregnant or possibly pregnant?</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="{safe_box}"><h4 style="color: #1A5276 !important; margin: 0;">2. Are you pregnant or possibly pregnant?</h4></div>', unsafe_allow_html=True)
         is_pregnant = st.checkbox("Yes, I am pregnant", label_visibility="collapsed")
         
     with col2:
-        st.markdown(f'<div style="{box_style}">3. Do you have a severe fear of closed spaces?</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="{safe_box}"><h4 style="color: #1A5276 !important; margin: 0;">3. Do you have a severe fear of closed spaces?</h4></div>', unsafe_allow_html=True)
         is_claustrophobic = st.checkbox("Yes, I have claustrophobia", label_visibility="collapsed")
         
         if modality in ["CT Scan", "MRI"]:
-            st.markdown(f'<div style="{box_style}">4. What is your latest Creatinine level?</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="{safe_box}"><h4 style="color: #1A5276 !important; margin: 0;">4. What is your latest Creatinine level?</h4></div>', unsafe_allow_html=True)
             creatinine = st.number_input("Creatinine", min_value=0, max_value=2000, value=80, label_visibility="collapsed")
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -278,22 +285,15 @@ elif page == "Virtual 3D Room":
     st.title(f"🧲 3D Room: {modality}")
     st.write("Explore the room to help you feel prepared.")
     
-    # YOUR SKETCHFAB 3D MODELS (Kept exactly as you had them)
+    # 3D Models (Update with your working links)
     if modality == "CT Scan":
         components.iframe("https://sketchfab.com/models/ef06495bdf0f4dbc94e0dbc7c05dd21c/embed", height=500)
     elif modality == "MRI":
-        components.iframe("https://sketchfab.com/models/74bc0dea266c4b228fcee69da6535330/embed", height=500)
+        components.iframe("https://sketchfab.com/models/940a1f45c3d540d6a5c4d020842b83f6/embed", height=500)
     elif modality == "Fluoroscopy":
-        components.iframe("https://sketchfab.com/models/9e4f12f999b344fcb257d805a05d24bd/embed", height=500)
-        st.info("💡 Note: The Fluoroscopy machine is called a 'C-arm' because of its shape. You will lie on a table while the C-arm moves around you.")
+        components.iframe("https://sketchfab.com/models/74bc0dea266c4b228fcee69da6535330/embed", height=500)
     elif modality == "X-Ray":
-        components.iframe("https://sketchfab.com/models/8c7f17ae00324cc7a67e2fede13a8d58/embed", height=500) 
-    elif modality == "Ultrasound (USG)":
-        components.iframe("https://sketchfab.com/models/17aa217cd9e4469cb2834d5fe9c09f72/embed", height=500)  
-    elif modality == "Mammography":
-        components.iframe("https://sketchfab.com/models/293306631a5b4d1da411c9c6804bfa1b/embed", height=500)  
-    elif modality == "DEXA":
-        components.iframe("https://sketchfab.com/models/681aa7ab7c3e4734929024c2f375edbe/embed", height=500) 
+        components.iframe("https://sketchfab.com/models/e17234d81f8245f2b8a4414b96d64a4d/embed", height=500)
     else:
         st.info("A specific 3D model is not available for this room, but you will be in a standard imaging room.")
 
@@ -314,13 +314,11 @@ elif page == "Download Checklist":
 
     st.subheader(f"Your {modality} Checklist:")
     
-    # --- Interactive Checkboxes ---
     checked_count = 0
     for i, item in enumerate(checklist):
         if st.checkbox(item, key=f"check_{i}"):
             checked_count += 1
             
-    # --- Progress Bar ---
     total_items = len(checklist)
     progress = checked_count / total_items
     st.progress(progress)
@@ -333,7 +331,6 @@ elif page == "Download Checklist":
         
     st.markdown("---")
     
-    # --- PDF Download ---
     if checked_count == total_items:
         pdf_bytes = create_pdf(checklist, modality)
         st.download_button(
@@ -358,4 +355,4 @@ elif page == "FAQ":
         st.write("They are usually safe, but they can affect people with kidney problems. That is why we check your Creatinine level.")
         
     with st.expander("How do I read my radiology report?"):
-        st.write("Your report will be sent to your doctor. Don't panic if you see medical words you don't understand. Your doctor will explain the results to you and what the next steps are.")
+        st.write("Your report will be sent to your doctor. Don't panic if you see medical words you don't understand. Your doctor will explain the results to you.")
