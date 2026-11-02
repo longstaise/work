@@ -299,11 +299,17 @@ elif page == "Virtual 3D Room":
     if modality == "CT Scan":
         components.iframe("https://sketchfab.com/models/ef06495bdf0f4dbc94e0dbc7c05dd21c/embed", height=500)
     elif modality == "MRI":
-        components.iframe("https://sketchfab.com/models/940a1f45c3d540d6a5c4d020842b83f6/embed", height=500)
-    elif modality == "Fluoroscopy":
         components.iframe("https://sketchfab.com/models/74bc0dea266c4b228fcee69da6535330/embed", height=500)
+    elif modality == "Fluoroscopy":
+        components.iframe("https://sketchfab.com/models/d5ba034831064094ad21eea535bd0121/embed", height=500)
     elif modality == "X-Ray":
-        components.iframe("https://sketchfab.com/models/e17234d81f8245f2b8a4414b96d64a4d/embed", height=500)
+        components.iframe("https://sketchfab.com/models/4beef45d513f4fb89cd90825b2b74d7f/embed", height=500)
+    elif modality == "Ultrasound (USG)":
+        components.iframe("https://sketchfab.com/models/17aa217cd9e4469cb2834d5fe9c09f72/embed", height=500)
+    elif modality == "Mammography":
+        components.iframe("https://sketchfab.com/models/293306631a5b4d1da411c9c6804bfa1b/embed", height=500)
+    elif modality == "DEXA":
+        components.iframe("https://sketchfab.com/models/681aa7ab7c3e4734929024c2f375edbe/embed", height=500)
     else:
         st.info("A specific 3D model is not available for this room, but you will be in a standard imaging room.")
 
