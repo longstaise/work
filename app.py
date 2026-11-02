@@ -78,9 +78,11 @@ h1, h2, h3 {{ color: {header_color} !important; }}
 [data-testid="stSidebar"] span,
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] .stSelectbox div,
-[data-testid="stSidebar"] .stRadio div {{
+[data-testid="stSidebar"] .stRadio div,
+[data-testid="stSidebar"] div[data-testid="stWidgetLabel"] p,
+[data-testid="stSidebar"] .stRadio label p {{
     color: {sidebar_text} !important;
-    font-weight: 600 !important; /* Made bold for readability */
+    font-weight: 600 !important;
 }}
 
 /* Fix the dropdown box text specifically */
