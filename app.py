@@ -108,6 +108,11 @@ h1, h2, h3 {{ color: {header_color} !important; }}
     margin-bottom: 15px; 
 }}
 .warning-box, .warning-box b {{ color: {warn_text} !important; }}
+/* Force Sidebar text to be bright white in dark mode */
+[data-testid="stSidebar"] * {{
+    color: {sidebar_text} !important;
+}}
+
 </style>
 """, unsafe_allow_html=True)
 
