@@ -19,7 +19,7 @@ is_dark_mode = st.components.v1.html(
     height=0, width=0
 )
 
-# Define colors
+# Define colors based on the mode
 if "dark" in str(is_dark_mode):
     bg_color = "#121212"
     card_bg = "#1E1E1E"
@@ -27,8 +27,10 @@ if "dark" in str(is_dark_mode):
     header_color = "#5DADE2"
     warn_bg = "#4A1919"
     warn_text = "#FADBD8"
-    sidebar_text = "#FFFFFF"
-    box_bg = "#2C3E50" # Dark blue for safety boxes
+    success_bg = "#144A38"
+    success_text = "#D1F2EB"
+    sidebar_text = "#FFFFFF" # Bright white for dark mode
+    box_bg = "#2C3E50" 
     box_text = "#FFFFFF"
 else:
     bg_color = "#F4F7F6"
@@ -37,8 +39,10 @@ else:
     header_color = "#1A5276"
     warn_bg = "#FDEDEC"
     warn_text = "#7B241C"
-    sidebar_text = "#2C3E50"
-    box_bg = "#E8F0F8" # Light blue for safety boxes
+    success_bg = "#E8F8F5"
+    success_text = "#145A32"
+    sidebar_text = "#2C3E50" # Dark grey for light mode
+    box_bg = "#E8F0F8" 
     box_text = "#1A5276"
 
 # Apply the "Nuclear" CSS
@@ -66,16 +70,25 @@ p, h1, h2, h3, h4, h5, h6, span {{
 /* SPECIFIC FIX FOR HEADERS */
 h1, h2, h3 {{ color: {header_color} !important; }}
 
-/* SIDEBAR CONTRAST FIX */
+/* --- NUCLEAR SIDEBAR TEXT FIX --- */
 [data-testid="stSidebar"] h1, 
 [data-testid="stSidebar"] h2, 
 [data-testid="stSidebar"] h3, 
 [data-testid="stSidebar"] p, 
-[data-testid="stSidebar"] label {{
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] .stSelectbox div,
+[data-testid="stSidebar"] .stRadio div {{
+    color: {sidebar_text} !important;
+    font-weight: 600 !important; /* Made bold for readability */
+}}
+
+/* Fix the dropdown box text specifically */
+[data-testid="stSidebar"] div[data-baseweb="select"] * {{
     color: {sidebar_text} !important;
 }}
 
-/* SAFETY TRIAGE BOX FIX (Using inline HTML classes) */
+/* SAFETY TRIAGE BOX FIX */
 .safety-box {{
     background-color: {box_bg} !important;
     color: {box_text} !important;
@@ -108,11 +121,6 @@ h1, h2, h3 {{ color: {header_color} !important; }}
     margin-bottom: 15px; 
 }}
 .warning-box, .warning-box b {{ color: {warn_text} !important; }}
-/* Force Sidebar text to be bright white in dark mode */
-[data-testid="stSidebar"] * {{
-    color: {sidebar_text} !important;
-}}
-
 </style>
 """, unsafe_allow_html=True)
 
