@@ -47,6 +47,15 @@ st.markdown(f"""
 .stApp {{ background-color: {bg_color} !important; }}
 html, body, [class*="css"] {{ font-family: 'Inter', sans-serif; color: {text_color} !important; }}
 h1, h2, h3 {{ color: {header_color} !important; }}
+/* Force Streamlit text to be dark if background is light */
+[data-testid="stMarkdownContainer"] p, 
+[data-testid="stMarkdownContainer"] li, 
+.stMarkdown p, 
+.stMarkdown li,
+.stCheckbox label,
+.stRadio label {{
+    color: {text_color} !important;
+}}
 
 .custom-card {{ 
     background-color: {card_bg} !important; 
